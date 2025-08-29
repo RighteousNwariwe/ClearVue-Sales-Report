@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    /* CSS goes here */
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Menu -->
+  <div class="navbar">
+    <h1>📊 Sales Dashboard</h1>
+    <div class="nav-links">
+      <a href="#">Dashboard</a>
+      <a href="#">Reports</a>
+      <a href="#">Inventory</a>
+      <a href="#">Settings</a>
+    </div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard">
+
+    <!-- Quick Filters -->
+    <div class="filters">
+      <input type="date" id="dateRange">
+      <select id="region">
+        <option>All Regions</option>
+        <option>North</option>
+        <option>South</option>
+        <option>East</option>
+        <option>West</option>
+      </select>
+      <select id="warehouse">
+        <option>All Warehouses</option>
+        <option>Warehouse 1</option>
+        <option>Warehouse 2</option>
+      </select>
+      <select id="product">
+        <option>All Products</option>
+        <option>Product A</option>
+        <option>Product B</option>
+      </select>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-cards">
+      <div class="card">
+        <h3>Sales Today</h3>
+        <p id="salesToday">$5,000</p>
+      </div>
+      <div class="card">
+        <h3>MTD Sales</h3>
+        <p id="mtdSales">$45,000</p>
+      </div>
+      <div class="card">
+        <h3>YTD Sales</h3>
+        <p id="ytdSales">$320,000</p>
+      </div>
+      <div class="card">
+        <h3>Gross Margin</h3>
+        <p id="grossMargin">62%</p>
+      </div>
+      <div class="card">
+        <h3>Top Product</h3>
+        <p id="topProduct">Product A</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Dashboard System
+  </footer>
+
+  <script>
+    /* JavaScript goes here */
+  </script>
+
+</body>
+</html>
