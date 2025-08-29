@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Reports · ClearVue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box} body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:#f6f7fb;margin:0}
+    header{background:#32325d;color:#fff;padding:16px}
+    nav{display:flex;gap:14px;align-items:center;background:#404060;color:#fff;padding:10px 16px}
+    nav a{color:#fff;text-decoration:none;font-weight:600} .spacer{flex:1}
+    .btn{border:0;background:#fff;color:#32325d;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+    .wrap{padding:18px}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .tab{padding:10px 14px;border-radius:10px;background:#e8e8f3;cursor:pointer;font-weight:700}
+    .tab.active{background:#32325d;color:#fff}
+    .panel{margin-top:12px;background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid #eee;padding:8px;text-align:left}
+  </style>
+</head>
+<body>
+  <header><h2 style="margin:0">Reports</h2></header>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="reports.html">Reports</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="admin.html">Admin</a>
+    <span class="spacer"></span>
+    <button class="btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="wrap">
+    <div class="tabs">
+      <div class="tab active" data-id="daily">Daily</div>
+      <div class="tab" data-id="weekly">Weekly</div>
+      <div class="tab" data-id="monthly">Monthly</div>
+      <div class="tab" data-id="annual">Quarterly/Annual</div>
+    </div>
+
+    <div id="daily" class="panel">
+      <h3>Daily Report</h3>
+      <p>Sales by <b>rep</b>, <b>region</b>, <b>customer type</b>; Daily vs prior week/month/year.</p>
+      <table>
+        <thead><tr><th>Rep</th><th>Region</th><th>Customer Type</th><th>Sales</th></tr></thead>
+        <tbody>
+          <tr><td>REP-01</td><td>North</td><td>Wholesale</td><td>R 45,000</td></tr>
+          <tr><td>REP-07</td><td>West</td><td>Retail</td><td>R 31,200</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="weekly" class="panel" style="display:none">
+      <h3>Weekly Report</h3>
+      <p>Top 10 / Bottom 10 products; trend vs last weeks.</p>
+      <table>
+        <thead><tr><th>Rank</th><th>Product</th><th>Weekly Sales</th><th>Trend</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>LOR-100</td><td>R 210,000</td><td>+12%</td></tr>
+          <tr><td>10</td><td>PR-555</td><td>R 35,000</td><td>-3%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="monthly" class="panel" style="display:none">
+      <h3>Monthly Report</h3>
+      <p>Revenue, margins, acquisition/retention by product/category/brand; region & warehouse splits.</p>
+      <table>
+        <thead><tr><th>Category</th><th>Revenue</th><th>Margin</th><th>New Customers</th><th>Avg Order Size</th></tr></thead>
+        <tbody>
+          <tr><td>Electronics</td><td>R 2,400,000</td><td>31%</td><td>42</td><td>R 3,250</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="annual" class="panel" style="display:none">
+      <h3>Quarterly / Annual Report</h3>
+      <p>Seasonal patterns, quarterly comparisons, yearly performance.</p>
+      <table>
+        <thead><tr><th>Quarter</th><th>Revenue</th><th>YoY</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Q1</td><td>R 7,100,000</td><td>+9%</td><td>Promo lift</td></tr>
+          <tr><td>Q2</td><td>R 6,850,000</td><td>+4%</td><td>Returns normalization</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // --- Auth
+    function getUser(){ try{return JSON.parse(localStorage.getItem('currentUser')||'null')}catch{return null}}
+    function requireAuth(){ const u=getUser(); if(!u){ location.href='index.html'; } return u; }
+    function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
+    requireAuth();
+
+    // Tabs
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click', (e)=>{
+        const id = t.dataset.id;
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+        document.getElementById(id).style.display='block';
+      });
+    });
+  </script>
+</body>
+</html>

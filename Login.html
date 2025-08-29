@@ -5,140 +5,143 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ClearVue Ltd - Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
-  <style type="text/css">
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
     body {
-        font-family: 'Inter', sans-serif;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #edc0bf 0%, #c4caef 100%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #edc0bf 0%, #c4caef 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .auth-container {
-        background: rgba(255,255,255,0.3);
-        padding: 2rem;
-        border-radius: 16px;
-        width: 100%;
-        max-width: 400px;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      background: rgba(255,255,255,0.3);
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 420px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
     }
-    .auth-header {
-        text-align: center;
-        margin-bottom: 1.5rem;
-        color: #fff;
-    }
-    .auth-header h2 {
-        font-size: 1.8rem;
-        font-weight: 600;
-    }
-    .form-group {
-        margin-bottom: 1rem;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-        color: #333;
-    }
+    .auth-header { text-align: center; color: #fff; margin-bottom: 1rem; }
+    .auth-header h2 { font-size: 1.8rem; font-weight: 600; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: .4rem; font-weight: 600; color: #333; }
     .form-group input, .form-group select {
-        width: 100%;
-        padding: 0.7rem;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 0.95rem;
+      width: 100%; padding: 0.7rem; border-radius: 8px; border: 1px solid #ccc; font-size: 0.95rem;
     }
     .auth-button {
-        width: 100%;
-        padding: 0.8rem;
-        background: rgba(50, 50, 90, 0.85);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s, transform 0.2s;
+      width: 100%; padding: 0.8rem;
+      background: rgba(50,50,90,0.85);
+      color: #fff; border: none; border-radius: 10px;
+      font-weight: 600; cursor: pointer;
+      transition: .3s;
     }
-    .auth-button:hover {
-        background: rgba(50, 50, 90, 1);
-        transform: scale(1.03);
-    }
+    .auth-button:hover { background: rgba(50,50,90,1); transform: scale(1.03); }
     .error-message {
-        color: #d40b0b;
-        font-size: 0.9rem;
-        margin-top: 0.5rem;
-        display: none;
-        padding: 0.6rem;
-        background: rgba(212, 11, 11, 0.1);
-        border-radius: 6px;
+      color: #d40b0b; font-size: 0.9rem;
+      margin-top: 0.5rem; display: none;
+      padding: .6rem; background: rgba(212,11,11,0.1); border-radius: 6px;
     }
   </style>
 </head>
 <body>
-
   <div class="auth-container">
-      <div class="auth-header">
-          <h2>ClearVue Ltd</h2>
-          <p>Sales Reporting Portal Login</p>
-      </div>
+    <div class="auth-header">
+      <h2>ClearVue Ltd</h2>
+      <p>Sales Reporting Portal Login</p>
+    </div>
 
-      <form id="loginForm">
-          <div class="form-group">
-              <label for="loginEmail">Email</label>
-              <input type="email" id="loginEmail" required>
-          </div>
-          <div class="form-group">
-              <label for="loginPassword">Password</label>
-              <input type="password" id="loginPassword" required>
-          </div>
-          <div class="form-group">
-              <label for="role">Select Role</label>
-              <select id="role" required>
-                  <option value="">-- Choose Role --</option>
-                  <option value="admin">Admin</option>
-                  <option value="manager">Manager</option>
-                  <option value="salesrep">Sales Rep</option>
-              </select>
-          </div>
-          <button type="submit" class="auth-button">Login</button>
-          <div id="loginError" class="error-message"></div>
-      </form>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required>
+      </div>
+      <div class="form-group">
+        <label for="role">Select Role</label>
+        <select id="role" required>
+          <option value="">-- Choose Role --</option>
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="salesrep">Sales Rep</option>
+        </select>
+      </div>
+      <button type="submit" class="auth-button">Login</button>
+      <div id="loginError" class="error-message"></div>
+    </form>
   </div>
 
   <script>
-      // Handle login
-      document.getElementById('loginForm').addEventListener('submit', function(e) {
-          e.preventDefault();
-          const email = document.getElementById('loginEmail').value;
-          const password = document.getElementById('loginPassword').value;
-          const role = document.getElementById('role').value;
-          const loginError = document.getElementById('loginError');
+    // Dummy database (matching ERD + requirements)
+    const users = [
+      // Admins
+      { email: "righteous@clearvue.com", password: "admin123", role: "admin", name: "Righteous" },
+      { email: "nkululeko@clearvue.com", password: "admin123", role: "admin", name: "Nkululeko" },
+      { email: "thanyani@clearvue.com", password: "admin123", role: "admin", name: "Thanyani" },
+      { email: "sinovuyo@clearvue.com", password: "admin123", role: "admin", name: "Sinovuyo" },
+      { email: "odwa@clearvue.com", password: "admin123", role: "admin", name: "Odwa" },
+      { email: "karabo@clearvue.com", password: "admin123", role: "admin", name: "Karabo" },
 
-          if (!role) {
-              loginError.textContent = "Please select a role.";
-              loginError.style.display = "block";
-              return;
-          }
+      // Example Manager
+      { email: "manager@clearvue.com", password: "manager123", role: "manager", name: "Manager Mike" },
 
-          // Dummy login check (replace with Firebase/DB auth)
-          if (email && password) {
-              loginError.style.display = "none";
-              // Redirect based on role
-              if (role === "admin") {
-                  window.location.href = "dashboard_admin.html";
-              } else if (role === "manager") {
-                  window.location.href = "dashboard_manager.html";
-              } else {
-                  window.location.href = "dashboard_salesrep.html";
-              }
-          } else {
-              loginError.textContent = "Invalid login credentials.";
-              loginError.style.display = "block";
-          }
-      });
+      // Example Sales Rep
+      { email: "salesrep@clearvue.com", password: "sales123", role: "salesrep", name: "Sales Sam" }
+    ];
+
+    // Role-based features (matching business requirements)
+    const roleFeatures = {
+      admin: [
+        "User management (Admins, Managers, Reps)",
+        "System setup: Fiscal Calendar rules",
+        "Access to ALL reports (Daily → Annual)",
+        "Supplier readiness dashboards"
+      ],
+      manager: [
+        "View regional & warehouse sales reports",
+        "Track top/bottom 10 products",
+        "Customer retention & acquisition metrics",
+        "Quarterly trends & pipeline analysis"
+      ],
+      salesrep: [
+        "Enter daily sales transactions",
+        "View personal sales vs targets",
+        "Customer account performance",
+        "Returns & credit note tracking"
+      ]
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const role = document.getElementById('role').value;
+      const loginError = document.getElementById('loginError');
+
+      const user = users.find(u => u.email === email && u.password === password && u.role === role);
+
+      if (!role) {
+        loginError.textContent = "Please select a role.";
+        loginError.style.display = "block";
+        return;
+      }
+
+      if (user) {
+        loginError.style.display = "none";
+        alert(`Welcome ${user.name}!\nRole: ${user.role.toUpperCase()}\nFeatures:\n- ${roleFeatures[user.role].join("\n- ")}`);
+        // Redirect by role
+        if (user.role === "admin") window.location.href = "dashboard_admin.html";
+        else if (user.role === "manager") window.location.href = "dashboard_manager.html";
+        else window.location.href = "dashboard_salesrep.html";
+      } else {
+        loginError.textContent = "Invalid credentials or role. Try again.";
+        loginError.style.display = "block";
+      }
+    });
   </script>
-
 </body>
 </html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ClearVue Ltd - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box} body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,#edc0bf 0%,#c4caef 100%);min-height:100vh;margin:0;display:flex;align-items:center;justify-content:center}
+    .card{width:100%;max-width:420px;background:rgba(255,255,255,.35);backdrop-filter:blur(12px);border-radius:16px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,.15)}
+    h1,h2,p{margin:0} .head{color:#fff;text-align:center;margin-bottom:16px}
+    .head h1{font-weight:700;font-size:28px} .head p{opacity:.95}
+    .row{margin-bottom:12px} label{display:block;margin-bottom:6px;font-weight:600;color:#2a2a2a}
+    input,select{width:100%;padding:10px;border:1px solid #cfcfcf;border-radius:10px;font-size:15px}
+    button{width:100%;padding:12px;border:0;border-radius:12px;background:#32325d;color:#fff;font-weight:700;cursor:pointer;transition:.2s}
+    button:hover{transform:scale(1.02);background:#2b2b55}
+    .err{display:none;margin-top:8px;background:rgba(212,11,11,.1);color:#b30909;border-radius:8px;padding:10px;font-size:14px}
+    .hint{font-size:12px;color:#333;margin-top:8px;line-height:1.4}
+    .foot{margin-top:14px;font-size:12px;color:#222}
+    .features{margin-top:10px;padding:10px;border-radius:10px;background:rgba(255,255,255,.55)}
+    .features h4{margin:0 0 6px 0}
+    ul{margin:6px 0 0 16px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <h1>ClearVue Ltd</h1>
+      <p>Sales Reporting Portal</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="row">
+        <label for="email">Email</label>
+        <input id="email" type="email" required placeholder="you@clearvue.com"/>
+      </div>
+      <div class="row">
+        <label for="password">Password</label>
+        <input id="password" type="password" required placeholder="••••••••"/>
+      </div>
+      <div class="row">
+        <label for="role">Role</label>
+        <select id="role" required>
+          <option value="">-- Choose Role --</option>
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="salesrep">Sales Rep</option>
+        </select>
+      </div>
+      <button type="submit">Login</button>
+      <div id="err" class="err"></div>
+      
+    </form>
+  </div>
+
+  <script>
+    // --- Dummy "database" users
+    const USERS = [
+      // Admins
+      { email:"righteous@clearvue.com", password:"admin123", role:"admin", name:"Righteous" },
+      { email:"nkululeko@clearvue.com", password:"admin123", role:"admin", name:"Nkululeko" },
+      { email:"thanyani@clearvue.com",  password:"admin123", role:"admin", name:"Thanyani" },
+      { email:"sinovuyo@clearvue.com",  password:"admin123", role:"admin", name:"Sinovuyo" },
+      { email:"odwa@clearvue.com",      password:"admin123", role:"admin", name:"Odwa" },
+      { email:"karabo@clearvue.com",    password:"admin123", role:"admin", name:"Karabo" },
+      // Manager + Sales
+      { email:"manager@clearvue.com",   password:"manager123", role:"manager", name:"Manager Mike" },
+      { email:"salesrep@clearvue.com",  password:"sales123",   role:"salesrep", name:"Sales Sam" }
+    ];
+
+    function go(path){ window.location.href = path; }
+
+    document.getElementById('loginForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value.trim();
+      const role = document.getElementById('role').value;
+      const err = document.getElementById('err');
+
+      if(!role){ err.textContent = "Please select a role."; err.style.display="block"; return; }
+
+      const user = USERS.find(u=>u.email===email && u.password===password && u.role===role);
+      if(!user){ err.textContent = "Invalid credentials or role."; err.style.display="block"; return; }
+
+      err.style.display="none";
+      // Store session (simple demo auth)
+      localStorage.setItem('currentUser', JSON.stringify({ email:user.email, role:user.role, name:user.name }));
+      go('dashboard.html');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Dashboard · ClearVue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box} body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:#f6f7fb;margin:0}
+    header{background:#32325d;color:#fff;padding:16px} header .small{opacity:.85;font-size:12px}
+    nav{display:flex;gap:14px;align-items:center;background:#404060;color:#fff;padding:10px 16px}
+    nav a{color:#fff;text-decoration:none;font-weight:600} nav .spacer{flex:1}
+    .btn{border:0;background:#fff;color:#32325d;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+    .wrap{padding:18px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .kpi{background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+    .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+    select,input{padding:10px;border:1px solid #d8d8e5;border-radius:10px}
+    .panel{background:#fff;border-radius:12px;padding:14px;box-shadow:0 6px 16px rgba(0,0,0,.06);margin-top:14px}
+    .note{font-size:12px;color:#333;margin-top:6px}
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h2 style="margin:0">ClearVue Dashboard</h2>
+        <div class="small">Fiscal calendar: Last Sat → Last Fri</div>
+      </div>
+      <div id="who"></div>
+    </div>
+  </header>
+
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="reports.html">Reports</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="admin.html">Admin</a>
+    <span class="spacer"></span>
+    <button class="btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="wrap">
+    <h3>Quick Filters</h3>
+    <div class="filters">
+      <input type="date" id="dateFrom"/>
+      <input type="date" id="dateTo"/>
+      <select id="region"><option>All Regions</option><option>North</option><option>South</option><option>East</option><option>West</option></select>
+      <select id="warehouse"><option>All Warehouses</option><option>WH-01</option><option>WH-02</option></select>
+      <select id="product"><option>All Products</option><option>LOR-100</option><option>BR-200</option></select>
+    </div>
+
+    <div class="grid">
+      <div class="kpi"><b>Sales Today</b><div style="font-size:28px;margin-top:6px">R 120,000</div></div>
+      <div class="kpi"><b>MTD</b><div style="font-size:28px;margin-top:6px">R 2,450,000</div></div>
+      <div class="kpi"><b>YTD</b><div style="font-size:28px;margin-top:6px">R 28,900,000</div></div>
+      <div class="kpi"><b>Gross Margin</b><div style="font-size:28px;margin-top:6px">32%</div></div>
+      <div class="kpi"><b>Top Product</b><div style="font-size:28px;margin-top:6px">LOR-100</div></div>
+    </div>
+
+    <div class="panel">
+      <b>What’s next?</b>
+      <ul>
+        <li>Go to <a href="reports.html">Reports</a> for Daily/Weekly/Monthly/Annual tabs.</li>
+        <li>Open <a href="analytics.html">Analytics</a> for Customer/Product/Supplier insights.</li>
+        <li>Admins/Managers: manage <a href="admin.html">Data, Users & Exports</a>.</li>
+      </ul>
+      <div class="note">* Data shown is demo; wire to your NoSQL backend when ready.</div>
+    </div>
+  </div>
+
+  <script>
+    // --- Auth guard shared helpers
+    function getUser(){ try{return JSON.parse(localStorage.getItem('currentUser')||'null')}catch{return null}}
+    function requireAuth(){ const u=getUser(); if(!u){ location.href='index.html'; } return u; }
+    function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
+
+    const u=requireAuth();
+    document.getElementById('who').textContent = u ? `${u.name} · ${u.role.toUpperCase()}` : '';
+  </script>
+</body>
+</html>

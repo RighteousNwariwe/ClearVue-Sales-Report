@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Analytics · ClearVue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box} body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:#f6f7fb;margin:0}
+    header{background:#32325d;color:#fff;padding:16px}
+    nav{display:flex;gap:14px;align-items:center;background:#404060;color:#fff;padding:10px 16px}
+    nav a{color:#fff;text-decoration:none;font-weight:600} .spacer{flex:1}
+    .btn{border:0;background:#fff;color:#32325d;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+    .wrap{padding:18px}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .tab{padding:10px 14px;border-radius:10px;background:#e8e8f3;cursor:pointer;font-weight:700}
+    .tab.active{background:#32325d;color:#fff}
+    .panel{margin-top:12px;background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid #eee;padding:8px;text-align:left}
+  </style>
+</head>
+<body>
+  <header><h2 style="margin:0">Analytics</h2></header>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="reports.html">Reports</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="admin.html">Admin</a>
+    <span class="spacer"></span>
+    <button class="btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="wrap">
+    <div class="tabs">
+      <div class="tab active" data-id="customer">Customer</div>
+      <div class="tab" data-id="product">Product</div>
+      <div class="tab" data-id="supplier">Supplier (future)</div>
+    </div>
+
+    <div id="customer" class="panel">
+      <h3>Customer Analytics</h3>
+      <ul>
+        <li>Lifetime Value (LTV)</li>
+        <li>Overdue payments (age analysis)</li>
+        <li>Discount customers impact on margin</li>
+      </ul>
+      <table>
+        <thead><tr><th>Customer</th><th>Segment</th><th>LTV</th><th>Overdue (days)</th><th>Discount?</th></tr></thead>
+        <tbody>
+          <tr><td>ACME Retail</td><td>Retail</td><td>R 420,000</td><td>14</td><td>Yes</td></tr>
+          <tr><td>Wholesale Hub</td><td>Wholesale</td><td>R 1,120,000</td><td>0</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="product" class="panel" style="display:none">
+      <h3>Product Analytics</h3>
+      <p>Drilldown: <b>Category → Brand → Product</b>. Track LOR vs current, promos vs standard.</p>
+      <table>
+        <thead><tr><th>Category</th><th>Brand</th><th>Product</th><th>Revenue</th><th>Margin</th><th>LOR?</th></tr></thead>
+        <tbody>
+          <tr><td>Electronics</td><td>VoltX</td><td>LOR-100</td><td>R 980,000</td><td>29%</td><td>Yes</td></tr>
+          <tr><td>Home</td><td>Pure</td><td>PR-555</td><td>R 330,000</td><td>34%</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="supplier" class="panel" style="display:none">
+      <h3>Supplier Analytics (Readiness)</h3>
+      <ul>
+        <li>Supplier sales contribution</li>
+        <li>Credit exposure / utilization</li>
+        <li>Promo effectiveness</li>
+      </ul>
+      <table>
+        <thead><tr><th>Supplier</th><th>Contribution</th><th>Credit Used</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Alpha Supplies</td><td>22%</td><td>R 1.2m</td><td>Promo Q1 lifted sales</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function getUser(){ try{return JSON.parse(localStorage.getItem('currentUser')||'null')}catch{return null}}
+    function requireAuth(){ const u=getUser(); if(!u){ location.href='index.html'; } return u; }
+    function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
+    requireAuth();
+
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click', ()=>{
+        const id = t.dataset.id;
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+        document.getElementById(id).style.display='block';
+      });
+    });
+  </script>
+</body>
+</html>

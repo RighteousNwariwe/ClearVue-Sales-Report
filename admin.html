@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Admin · ClearVue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box} body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:#f6f7fb;margin:0}
+    header{background:#32325d;color:#fff;padding:16px}
+    nav{display:flex;gap:14px;align-items:center;background:#404060;color:#fff;padding:10px 16px}
+    nav a{color:#fff;text-decoration:none;font-weight:600} .spacer{flex:1}
+    .btn{border:0;background:#fff;color:#32325d;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+    .wrap{padding:18px}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .tab{padding:10px 14px;border-radius:10px;background:#e8e8f3;cursor:pointer;font-weight:700}
+    .tab.active{background:#32325d;color:#fff}
+    .panel{margin-top:12px;background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid #eee;padding:8px;text-align:left}
+    .warn{background:#fff7e6;border:1px solid #ffd18a;color:#5c4500;padding:10px;border-radius:8px;margin-bottom:10px}
+  </style>
+</head>
+<body>
+  <header><h2 style="margin:0">Admin (Managers & Admins only)</h2></header>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="reports.html">Reports</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="admin.html">Admin</a>
+    <span class="spacer"></span>
+    <button class="btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="wrap">
+    <div id="guardMsg" class="warn" style="display:none">Access denied: This page is for <b>Admin</b> or <b>Manager</b> roles.</div>
+
+    <div class="tabs">
+      <div class="tab active" data-id="data">Data Management</div>
+      <div class="tab" data-id="users">User Management</div>
+      <div class="tab" data-id="export">Export/Download</div>
+    </div>
+
+    <div id="data" class="panel">
+      <h3>Data Management</h3>
+      <ul>
+        <li>Refresh sales extracts</li>
+        <li>Monitor uploads / exceptions</li>
+        <li>Manage <b>Fiscal Calendar</b> (Last Sat → Last Fri)</li>
+      </ul>
+      <table>
+        <thead><tr><th>Task</th><th>Status</th><th>Last Run</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Load Transactions</td><td>OK</td><td>2025-08-20 04:10</td><td><button>Run</button></td></tr>
+          <tr><td>Rebuild Indexes</td><td>OK</td><td>2025-08-20 04:15</td><td><button>Run</button></td></tr>
+          <tr><td>Fiscal Calendar Recompute</td><td>OK</td><td>2025-08-01 00:10</td><td><button>Run</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="users" class="panel" style="display:none">
+      <h3>User Management</h3>
+      <p>Create/manage users & roles (Admin, Manager, Sales Rep).</p>
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+        <tbody id="userRows"></tbody>
+      </table>
+    </div>
+
+    <div id="export" class="panel" style="display:none">
+      <h3>Export / Download</h3>
+      <ul>
+        <li>Export Reports → Excel</li>
+        <li>Export Reports → PDF</li>
+        <li>Export Data → CSV</li>
+      </ul>
+      <button class="btn">Export (Excel)</button>
+      <button class="btn">Export (PDF)</button>
+      <button class="btn">Export (CSV)</button>
+    </div>
+  </div>
+
+  <script>
+    // --- Auth helpers
+    function getUser(){ try{return JSON.parse(localStorage.getItem('currentUser')||'null')}catch{return null}}
+    function requireAuth(){ const u=getUser(); if(!u){ location.href='index.html'; } return u; }
+    function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
+    const u = requireAuth();
+
+    // Role guard: only admin or manager
+    if(!(u.role==='admin' || u.role==='manager')){
+      document.getElementById('guardMsg').style.display='block';
+      // optionally redirect:
+      // location.href='dashboard.html';
+    }
+
+    // Demo user list (same as login)
+    const DEMO_USERS = [
+      { name:"Righteous", email:"righteous@clearvue.com", role:"admin" },
+      { name:"Nkululeko", email:"nkululeko@clearvue.com", role:"admin" },
+      { name:"Thanyani",  email:"thanyani@clearvue.com", role:"admin" },
+      { name:"Sinovuyo",  email:"sinovuyo@clearvue.com", role:"admin" },
+      { name:"Odwa",      email:"odwa@clearvue.com", role:"admin" },
+      { name:"Karabo",    email:"karabo@clearvue.com", role:"admin" },
+      { name:"Manager Mike", email:"manager@clearvue.com", role:"manager" },
+      { name:"Sales Sam", email:"salesrep@clearvue.com", role:"salesrep" }
+    ];
+
+    const tbody = document.getElementById('userRows');
+    tbody.innerHTML = DEMO_USERS.map(u => `
+      <tr>
+        <td>${u.name}</td><td>${u.email}</td><td>${u.role.toUpperCase()}</td>
+        <td><button>Edit</button> <button>Disable</button></td>
+      </tr>`).join('');
+
+    // Tabs
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click', ()=>{
+        const id = t.dataset.id;
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+        document.getElementById(id).style.display='block';
+      });
+    });
+  </script>
+</body>
+</html>
