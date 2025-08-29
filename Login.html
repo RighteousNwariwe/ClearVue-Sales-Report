@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClearVue Ltd - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style type="text/css">
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Inter', sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #edc0bf 0%, #c4caef 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .auth-container {
+        background: rgba(255,255,255,0.3);
+        padding: 2rem;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 400px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .auth-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #fff;
+    }
+    .auth-header h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 0.7rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 0.95rem;
+    }
+    .auth-button {
+        width: 100%;
+        padding: 0.8rem;
+        background: rgba(50, 50, 90, 0.85);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+    }
+    .auth-button:hover {
+        background: rgba(50, 50, 90, 1);
+        transform: scale(1.03);
+    }
+    .error-message {
+        color: #d40b0b;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: none;
+        padding: 0.6rem;
+        background: rgba(212, 11, 11, 0.1);
+        border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+      <div class="auth-header">
+          <h2>ClearVue Ltd</h2>
+          <p>Sales Reporting Portal Login</p>
+      </div>
+
+      <form id="loginForm">
+          <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <input type="email" id="loginEmail" required>
+          </div>
+          <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <input type="password" id="loginPassword" required>
+          </div>
+          <div class="form-group">
+              <label for="role">Select Role</label>
+              <select id="role" required>
+                  <option value="">-- Choose Role --</option>
+                  <option value="admin">Admin</option>
+                  <option value="manager">Manager</option>
+                  <option value="salesrep">Sales Rep</option>
+              </select>
+          </div>
+          <button type="submit" class="auth-button">Login</button>
+          <div id="loginError" class="error-message"></div>
+      </form>
+  </div>
+
+  <script>
+      // Handle login
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          const email = document.getElementById('loginEmail').value;
+          const password = document.getElementById('loginPassword').value;
+          const role = document.getElementById('role').value;
+          const loginError = document.getElementById('loginError');
+
+          if (!role) {
+              loginError.textContent = "Please select a role.";
+              loginError.style.display = "block";
+              return;
+          }
+
+          // Dummy login check (replace with Firebase/DB auth)
+          if (email && password) {
+              loginError.style.display = "none";
+              // Redirect based on role
+              if (role === "admin") {
+                  window.location.href = "dashboard_admin.html";
+              } else if (role === "manager") {
+                  window.location.href = "dashboard_manager.html";
+              } else {
+                  window.location.href = "dashboard_salesrep.html";
+              }
+          } else {
+              loginError.textContent = "Invalid login credentials.";
+              loginError.style.display = "block";
+          }
+      });
+  </script>
+
+</body>
+</html>
