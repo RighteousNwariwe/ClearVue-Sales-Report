@@ -22,7 +22,7 @@ module.exports = mongoose.model('Sale', saleSchema);
 // ===== logic/SalesLogic.js =====
 const Sale = require('../models/Sale');
 const Product = require('../models/Product');
-const InventoryLogic = require('../InventoryLogic');
+const InventoryLogic = require('./InventoryLogic');
 
 class SalesLogic {
 
