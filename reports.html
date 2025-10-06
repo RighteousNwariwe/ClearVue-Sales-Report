@@ -40,12 +40,11 @@
 
     <div id="daily" class="panel">
       <h3>Daily Report</h3>
-      <p>Sales by <b>rep</b>, <b>region</b>, <b>customer type</b>; Daily vs prior week/month/year.</p>
+      <p>Sales by <b>customer</b>, <b>date</b>, <b>total</b>, and <b>items</b> from database.</p>
       <table>
-        <thead><tr><th>Rep</th><th>Region</th><th>Customer Type</th><th>Sales</th></tr></thead>
+        <thead><tr><th>Customer</th><th>Date</th><th>Total</th><th>Items</th></tr></thead>
         <tbody>
-          <tr><td>REP-01</td><td>North</td><td>Wholesale</td><td>R 45,000</td></tr>
-          <tr><td>REP-07</td><td>West</td><td>Retail</td><td>R 31,200</td></tr>
+          <!-- Sales data will be loaded here -->
         </tbody>
       </table>
     </div>
@@ -93,16 +92,102 @@
     function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
     requireAuth();
 
-    // Tabs
+    // Tabs and dynamic data loading
+    function showPanel(id) {
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      document.querySelector(`[data-id="${id}"]`).classList.add('active');
+      document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+      document.getElementById(id).style.display='block';
+      // Load data for each tab
+      if (id === 'daily') loadDailySales();
+      if (id === 'weekly') loadWeeklyReport();
+      if (id === 'monthly') loadMonthlyReport();
+      if (id === 'annual') loadAnnualReport();
+    }
     document.querySelectorAll('.tab').forEach(t=>{
       t.addEventListener('click', (e)=>{
-        const id = t.dataset.id;
-        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-        t.classList.add('active');
-        document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
-        document.getElementById(id).style.display='block';
+        showPanel(t.dataset.id);
       });
     });
+
+    // --- Fetch sales data and populate Daily Report ---
+    async function loadDailySales() {
+      try {
+        const res = await fetch('http://localhost:4000/api/sales');
+        const sales = await res.json();
+        const tbody = document.querySelector('#daily tbody');
+        tbody.innerHTML = '';
+        sales.forEach(sale => {
+          const customer = sale.customerId?.name || 'N/A';
+          const date = sale.saleDate ? new Date(sale.saleDate).toLocaleDateString() : 'N/A';
+          const total = sale.total ? `R ${sale.total.toLocaleString()}` : 'N/A';
+          const items = Array.isArray(sale.items)
+            ? sale.items.map(item => `${item.quantity} × ${item.productId?.name || 'Product'}`).join(', ')
+            : 'N/A';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${customer}</td><td>${date}</td><td>${total}</td><td>${items}</td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        // Show dummy data if API fails
+        const tbody = document.querySelector('#daily tbody');
+        tbody.innerHTML = `<tr><td>Demo Customer</td><td>2025-10-06</td><td>R 12,500</td><td>2 × Widget, 1 × Gadget</td></tr>`;
+      }
+    }
+
+    // --- Weekly Report Dummy Data ---
+    async function loadWeeklyReport() {
+      const tbody = document.querySelector('#weekly tbody');
+      tbody.innerHTML = '';
+      try {
+        const res = await fetch('http://localhost:4000/api/sales/weekly');
+        const weekly = await res.json();
+        weekly.forEach((row, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${idx + 1}</td><td>${row._id || 'Product'}</td><td>R ${row.totalSales?.toLocaleString() || '0'}</td><td>${row.totalUnits || 0} units</td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        tbody.innerHTML = `<tr><td>1</td><td>Widget</td><td>R 21,000</td><td>+8%</td></tr>`;
+      }
+    }
+
+    // --- Monthly Report Dummy Data ---
+    async function loadMonthlyReport() {
+      const tbody = document.querySelector('#monthly tbody');
+      tbody.innerHTML = '';
+      try {
+        const res = await fetch('http://localhost:4000/api/sales/monthly');
+        const monthly = await res.json();
+        monthly.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${row._id || 'Category'}</td><td>R ${row.revenue?.toLocaleString() || '0'}</td><td>-</td><td>-</td><td>-</td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        tbody.innerHTML = `<tr><td>Electronics</td><td>R 240,000</td><td>29%</td><td>12</td><td>R 2,000</td></tr>`;
+      }
+    }
+
+    // --- Annual Report Dummy Data ---
+    async function loadAnnualReport() {
+      const tbody = document.querySelector('#annual tbody');
+      tbody.innerHTML = '';
+      try {
+        const res = await fetch('http://localhost:4000/api/sales/annual');
+        const annual = await res.json();
+        annual.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>Q${row._id}</td><td>R ${row.revenue?.toLocaleString() || '0'}</td><td>-</td><td>${row.count} sales</td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        tbody.innerHTML = `<tr><td>Q1</td><td>R 710,000</td><td>+9%</td><td>Promo lift</td></tr>`;
+      }
+    }
+
+    // Load Daily tab by default
+    showPanel('daily');
   </script>
 </body>
 </html>
