@@ -1,0 +1,5 @@
+kafka-python==2.0.2
+pymongo==4.5.0
+pandas==2.0.3
+plotly==5.17.0
+python-dotenv==1.0.0
