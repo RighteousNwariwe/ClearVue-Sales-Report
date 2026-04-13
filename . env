@@ -3,14 +3,3 @@ MONGODB_URI=mongodb+srv://Admin:Admin123@cluster.mongodb.net/clearvu
 
 # Kafka Configuration
 KAFKA_BROKER=localhost:9092
-KAFKA_TOPIC=user-input-stream
-
-# Dashboard Configuration
-DASHBOARD_PORT=8501
-DASHBOARD_THEME=dark
-AUTO_REFRESH_SECONDS=10
-
-# Application settings
-APP_NAME=ClearvueDataManager
-ENVIRONMENT=development
-DEBUG_MODE=true
