@@ -1,6 +1,0 @@
-# MongoDB Configuration
-# Standard MongoDB connection (not SRV)
-MONGO_URI =mongodb://Admin:passwordfill @atlas-sql-68e4316a8e76882794593e57-vmefdg.a.query.mongodb.net:27017/ClearVue-Sales-Report?ssl=true&authSource=admin&retryWrites=true&w=majority
-
-# Kafka Configuration
-KAFKA_BROKER=localhost:9092
