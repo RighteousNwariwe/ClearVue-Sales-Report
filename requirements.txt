@@ -3,3 +3,6 @@ pymongo==4.5.0
 pandas==2.0.3
 plotly==5.17.0
 python-dotenv==1.0.0
+
+dependency
+pip install --user pymongo kafka-python pandas plotly python-dotenv
